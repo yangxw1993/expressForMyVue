@@ -9,7 +9,7 @@ app.use(cors({
   alloweHeaders:['Content-Type', 'Authorization']
 }));
  // need it...  
-app.use(bodyParser.urlencoded({ extended: false }));  
+ app.use(bodyParser.urlencoded({extended: true})) 
 
 
 app.get('/', function(req, res){
@@ -23,12 +23,8 @@ app.get('/test_api', function(req, res){
 
 let JSON = null
 // 接收参数接收
-app.post('/sendData', function(req, res){
-  console.log(JSON,'****');
-  res.send({code: 0, msg: 'ok'});
-});
-app.get('/sendData', function(req, res){
-  console.log(JSON,'****');
+app.post('/sendData', bodyParser.json(), function(req, res){
+  console.log('req body', req.body)
   res.send({code: 0, msg: 'ok'});
 });
 
