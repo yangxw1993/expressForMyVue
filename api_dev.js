@@ -21,13 +21,19 @@ app.get('/test_api', function(req, res){
   res.send({a:123});
 });
 
-let JSON = null
+let reqData = null
 // 接收参数接收
 app.post('/sendData', bodyParser.json(), function(req, res){
-  console.log('req body', req.body)
+  reqData = req.body;
   res.send({code: 0, msg: 'ok'});
 });
-
+app.get('/getData', (req, res) => {
+  if(reqData){
+    res.send({code: 0, data: reqData, msg: 'ok'});
+  }else{
+    res.send({code: 0, msg: '暂无数据'});
+  }
+})
 app.listen( 8081,function(){
 console.log( '8081，中间件已经启动！' )
 });
