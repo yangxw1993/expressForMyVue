@@ -34,6 +34,11 @@ app.get('/getData', (req, res) => {
     res.send({code: 0, msg: '暂无数据'});
   }
 })
+// 用户注册
+app.post('/register', bodyParser.json(), function(req, res){
+  console.log(req.body)
+  res.send({code: 0, msg: 'ok'});
+});
 app.listen( 8081,function(){
 console.log( '8081，中间件已经启动！' )
 });
