@@ -1,4 +1,9 @@
 const express = require('express');
+// 引入 mongoDB模块，获得它的客户端对象
+const MongoClient = require('mongodb').MongoClient;
+// mongoDB连接字符串
+const DB_CONN_STR = 'mongodb://localhost:27017/';
+
 const cors = require('cors')
 const app = express();
 const bodyParser = require('body-parser');
@@ -37,7 +42,20 @@ app.get('/getData', (req, res) => {
 // 用户注册
 app.post('/register', bodyParser.json(), function(req, res){
   console.log(req.body)
-  res.send({code: 0, msg: 'ok'});
+  let _insertMsg = req.body;
+  // 这个部分，示例代码里都有，同学们复制一下，不要自己写，很容易错
+  MongoClient.connect( DB_CONN_STR, function(err, db){
+    // 数据库名：proShopCart
+    var _dbo = db.db('proShopCart');
+    // 集合名：userInfo
+    var _collection = _dbo.collection( 'userInfo' );
+    _collection.insertOne( _insertMsg, function(err, result){
+      if(err) throw err;
+      console.log('注册成功！');
+      res.send({code: 0, msg: '注册成功！'});
+      db.close();
+    })
+  })
 });
 app.listen( 8081,function(){
 console.log( '8081，中间件已经启动！' )
