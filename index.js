@@ -4,6 +4,8 @@ const MongoClient = require('mongodb').MongoClient;
 // mongoDB连接字符串
 const MONGOURL = 'mongodb://localhost:27017/';
 
+const { queryDB, connect } = require('./utils/connectMongo')
+
 const cors = require('cors')
 const app = express();
 const bodyParser = require('body-parser');
@@ -43,12 +45,11 @@ app.get('/getData', (req, res) => {
 app.post('/register', bodyParser.json(), function(req, res){
   console.log(req.body)
   let _insertMsg = req.body;
-  // 这个部分，示例代码里都有，同学们复制一下，不要自己写，很容易错
   MongoClient.connect( MONGOURL, function(err, db){
     // 数据库名：proShopCart
-    var _dbo = db.db('proShopCart');
+    let _dbo = db.db('proShopCart');
     // 集合名：userInfo
-    var _collection = _dbo.collection( 'userInfo' );
+    let _collection = _dbo.collection( 'userInfo' );
     _collection.insertOne( _insertMsg, function(err, result){
       if(err) throw err;
       console.log('注册成功！');
@@ -58,7 +59,7 @@ app.post('/register', bodyParser.json(), function(req, res){
   })
 });
 // 查询MongoDB
-MongoClient.connect(MONGOURL, { useNewUrlParser: true }, function(err, db) {
+/*  MongoClient.connect(MONGOURL, { useNewUrlParser: true }, function(err, db) {
   if (err) throw err;
   var dbo = db.db("proShopCart");
   dbo.collection("userInfo"). find({}).toArray(function(err, result) { // 返回集合中所有数据
@@ -66,7 +67,15 @@ MongoClient.connect(MONGOURL, { useNewUrlParser: true }, function(err, db) {
       console.log(result);
       db.close();
   });
-});
+}); */ 
+// console.log(connectMongo,'**')
+connect('proShopCart', 'userInfo').then(db => {
+  return db
+}).then(db => {
+  return queryDB()
+}).then(res => {
+  console.log(res,'**')
+})
 app.listen( 8081,function(){
-console.log( '8081，中间件已经启动！' )
+  console.log( '8081，中间件已经启动！' )
 });
