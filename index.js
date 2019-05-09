@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 // mongoDB连接字符串
 const MONGOURL = 'mongodb://localhost:27017/';
 
-const { queryDB, connect } = require('./utils/connectMongo')
+const { queryDB, insertDB } = require('./utils/connectMongo')
 
 const cors = require('cors')
 const app = express();
@@ -45,7 +45,13 @@ app.get('/getData', (req, res) => {
 app.post('/register', bodyParser.json(), function(req, res){
   console.log(req.body)
   let _insertMsg = req.body;
-  MongoClient.connect( MONGOURL, function(err, db){
+  insertDB('proShopCart', 'userInfo', _insertMsg).then(result => {
+    res.send({code: 0, msg: '注册成功！'});
+  }).catch(err => {
+
+    res.send({code: 1, msg: err});
+  })
+  /* MongoClient.connect( MONGOURL, function(err, db){
     // 数据库名：proShopCart
     let _dbo = db.db('proShopCart');
     // 集合名：userInfo
@@ -56,10 +62,10 @@ app.post('/register', bodyParser.json(), function(req, res){
       res.send({code: 0, msg: '注册成功！'});
       db.close();
     })
-  })
+  }) */
 });
 // 查询MongoDB
-/*  MongoClient.connect(MONGOURL, { useNewUrlParser: true }, function(err, db) {
+/* MongoClient.connect(MONGOURL, { useNewUrlParser: true }, function(err, db) {
   if (err) throw err;
   var dbo = db.db("proShopCart");
   dbo.collection("userInfo"). find({}).toArray(function(err, result) { // 返回集合中所有数据
@@ -67,15 +73,13 @@ app.post('/register', bodyParser.json(), function(req, res){
       console.log(result);
       db.close();
   });
-}); */ 
+}); */
 // console.log(connectMongo,'**')
-connect('proShopCart', 'userInfo').then(db => {
-  return db
-}).then(db => {
-  return queryDB()
-}).then(res => {
+queryDB('proShopCart', 'userInfo').then( res => {
+  console.log(res);
+})/* .then(res => {
   console.log(res,'**')
-})
-app.listen( 8081,function(){
-  console.log( '8081，中间件已经启动！' )
+}) */
+app.listen(8888,function(){
+  console.log( '8888，服务启动！' )
 });
