@@ -42,42 +42,32 @@ app.get('/getData', (req, res) => {
   }
 })
 // 用户注册
+const dbName = 'proShopCart', sheet = 'userInfo';
 app.post('/register', bodyParser.json(), function(req, res){
-  console.log(req.body)
-  let _insertMsg = req.body;
-  insertDB('proShopCart', 'userInfo', _insertMsg).then(result => {
-    res.send({code: 0, msg: '注册成功！'});
+  let user = req.body;
+  queryDB('proShopCart', 'userInfo').then( query => {
+    return query
+  }).then(query => {
+    let userArr = query;
+    for(let item of userArr){
+      console.log(item.username,'*', user.username)
+      if(item.username === user.username){
+        res.send({code: 1, msg: '用户名已注册'})
+        return false;
+      }
+    }
+    insertDB(dbName, sheet, user).then(result => {
+      res.send({code: 0, msg: '注册成功！'});
+    })
   }).catch(err => {
-
     res.send({code: 1, msg: err});
   })
-  /* MongoClient.connect( MONGOURL, function(err, db){
-    // 数据库名：proShopCart
-    let _dbo = db.db('proShopCart');
-    // 集合名：userInfo
-    let _collection = _dbo.collection( 'userInfo' );
-    _collection.insertOne( _insertMsg, function(err, result){
-      if(err) throw err;
-      console.log('注册成功！');
-      res.send({code: 0, msg: '注册成功！'});
-      db.close();
-    })
-  }) */
+  
 });
-// 查询MongoDB
-/* MongoClient.connect(MONGOURL, { useNewUrlParser: true }, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("proShopCart");
-  dbo.collection("userInfo"). find({}).toArray(function(err, result) { // 返回集合中所有数据
-      if (err) throw err;
-      console.log(result);
-      db.close();
-  });
-}); */
-// console.log(connectMongo,'**')
-queryDB('proShopCart', 'userInfo').then( res => {
+
+/* queryDB('proShopCart', 'userInfo').then( res => {
   console.log(res);
-})/* .then(res => {
+}) *//* .then(res => {
   console.log(res,'**')
 }) */
 app.listen(8888,function(){
