@@ -9,6 +9,10 @@ const { queryDB, insertDB } = require('./utils/connectMongo')
 const cors = require('cors')
 const app = express();
 const bodyParser = require('body-parser');
+const homeRouterPath = './routes/home'
+
+
+
 
 app.use(cors({
   origin:['http://localhost:8080'],
@@ -16,21 +20,17 @@ app.use(cors({
   alloweHeaders:['Content-Type', 'Authorization']
 }));
  // need it...  
- app.use(bodyParser.urlencoded({extended: true})) 
+ app.use(bodyParser.urlencoded({extended: true}))
 
+// 首页
+// app.use('/', require(`${homeRouterPath}/index`));
+// 接受参数
+app.use('/test', require(`${homeRouterPath}/test/index`));
+// 返回请求值
+// app.use('/getData', require(`${homeRouterPath}/test/getData`))
 
-app.get('/', function(req, res){
-  res.send({a:'hello world'});
-});
-// 第一个nodeJs接口，接收
-app.get('/test_api', function(req, res){
-  console.log('开始')
-  res.send({a:123});
-});
-
-let reqData = null
 // 接收参数接收
-app.post('/sendData', bodyParser.json(), function(req, res){
+/* app.post('/sendData', bodyParser.json(), function(req, res){
   reqData = req.body;
   res.send({code: 0, msg: 'ok'});
 });
@@ -40,7 +40,7 @@ app.get('/getData', (req, res) => {
   }else{
     res.send({code: 0, msg: '暂无数据'});
   }
-})
+}) */
 // 用户注册
 const dbName = 'proShopCart', sheet = 'userInfo';
 app.post('/register', bodyParser.json(), function(req, res){
