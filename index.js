@@ -13,9 +13,10 @@ const homeRouterPath = './routes/home'
 
 
 
-
+const host = 'http://localhost';
+const portArr = ['8080', '8000'];
 app.use(cors({
-  origin:['http://localhost:8080'],
+  origin: portArr.map(item => `${host}:${item}`),
   methods:['GET','POST'],
   alloweHeaders:['Content-Type', 'Authorization']
 }));
@@ -23,7 +24,7 @@ app.use(cors({
  app.use(bodyParser.urlencoded({extended: true}))
 
 // 首页
-// app.use('/', require(`${homeRouterPath}/index`));
+app.use('/', require(`${homeRouterPath}/index`));
 // 接受参数
 app.use('/test', require(`${homeRouterPath}/test/index`));
 // 返回请求值
