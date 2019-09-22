@@ -9,24 +9,31 @@ const { queryDB, insertDB } = require('./utils/connectMongo')
 const cors = require('cors')
 const app = express();
 const bodyParser = require('body-parser');
+const routes = require('./routes/index');
+routes(app)
 const homeRouterPath = './routes/home'
 
 
+function setCors(){
+  const host = 'http://localhost';
+  const portArr = ['8080', '8000'];
+  app.use(cors({
+    origin: portArr.map(item => `${host}:${item}`),
+    methods:['GET','POST'],
+    alloweHeaders:['Content-Type', 'Authorization']
+  }));
+   // need it...  
+   app.use(bodyParser.urlencoded({extended: true}))
+}
 
-const host = 'http://localhost';
-const portArr = ['8080', '8000'];
-app.use(cors({
-  origin: portArr.map(item => `${host}:${item}`),
-  methods:['GET','POST'],
-  alloweHeaders:['Content-Type', 'Authorization']
-}));
- // need it...  
- app.use(bodyParser.urlencoded({extended: true}))
+setCors();
+
 
 // 首页
-app.use('/', require(`${homeRouterPath}/index`));
+// app.use('/', require('./routes/'));
+// app.use('/user', require(`${homeRouterPath}/user/index`));
 // 接受参数
-app.use('/test', require(`${homeRouterPath}/test/index`));
+// app.use('/test', require(`${homeRouterPath}/test/index`));
 // 返回请求值
 // app.use('/getData', require(`${homeRouterPath}/test/getData`))
 
@@ -71,6 +78,6 @@ app.post('/register', bodyParser.json(), function(req, res){
 }) *//* .then(res => {
   console.log(res,'**')
 }) */
-app.listen(8888,function(){
-  console.log( '8888，服务启动！' )
+app.listen(3001, () => {
+  console.log('htpp://localhost:3001')
 });
