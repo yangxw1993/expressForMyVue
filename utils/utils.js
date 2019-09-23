@@ -1,14 +1,19 @@
-function resultData(msg, data = null, code = 0){
-  let res = {
-    code,
-    data,
-    msg
+function successSend(msg, data){
+  const sendData = {
+    code: 0,
+    msg: msg || '成功',
+    data: data || ''
   }
-  if(!data){
-    delete res.data;
-  }
-  return res;
+  return sendData
 }
-module.export = {
-  resultData
+function failSend(msg){
+  const sendData = {
+    code: 1,
+    msg: msg || '失败',
+  }
+  return sendData
+}
+module.exports = {
+  successSend,
+  failSend
 }
