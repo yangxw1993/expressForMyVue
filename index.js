@@ -9,26 +9,23 @@ const { queryDB, insertDB } = require('./utils/connectMongo')
 const cors = require('cors')
 const app = express();
 const bodyParser = require('body-parser');
-const routes = require('./routes/index');
-routes(app)
-const homeRouterPath = './routes/home'
-
+// need it...  
+app.use(bodyParser.urlencoded({extended: true}))
 
 function setCors(){
   const host = 'http://localhost';
-  const portArr = ['8080', '8000'];
+  const portArr = ['5500', '8000','8001'];
   app.use(cors({
     origin: portArr.map(item => `${host}:${item}`),
     methods:['GET','POST'],
     alloweHeaders:['Content-Type', 'Authorization']
   }));
-   // need it...  
-   app.use(bodyParser.urlencoded({extended: true}))
+   
 }
-
 setCors();
 
-
+const routes = require('./routes/index');
+routes(app)
 // 首页
 // app.use('/', require('./routes/'));
 // app.use('/user', require(`${homeRouterPath}/user/index`));
