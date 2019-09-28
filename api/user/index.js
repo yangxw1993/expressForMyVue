@@ -21,12 +21,15 @@ router.post('/register', bodyParser.json(),function(req, res){
           return err
         }
         const userList = JSON.parse(data);
+        // console.log(userParam,'**userParam')
         for(let item of userList){
-          if(item.username === userParam.username){
-            res.send(failSend('用户名已存在，请更改用户名！'))
+          if(item.username && item.username === userParam.username){
+            // console.log(item,'item', userParam);
+            res.send(failSend(`用户名已存在，请更改用户名！${userParam.username}`, userList))
             return;
           }
         }
+        console.log(userParam)
         userList.push(userParam);
         writeFile(res, JSON.stringify(userList))
       })
