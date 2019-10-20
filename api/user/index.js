@@ -53,7 +53,7 @@ router.post('/login', bodyParser.json(), (req, res) => {
           res.send(failSend('用户名或密码错误'));
           return;
         }
-        res.send(successSend('成功'));
+        res.send(successSend('成功', item));
         return;
       }
     }
