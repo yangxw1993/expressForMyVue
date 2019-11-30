@@ -1,0 +1,34 @@
+[
+	{
+		"id": "gRXdse_240_1575131954482",
+		"goodsName": "1",
+		"description": "测试",
+		"options": [
+			{
+				"size": "100",
+				"price": "1000"
+			},
+			{
+				"size": "200",
+				"price": "2000"
+			}
+		],
+		"creatTime": 1575131954482
+	},
+	{
+		"id": "ytaBqe_7335_1575131962754",
+		"goodsName": "1",
+		"description": "测试",
+		"options": [
+			{
+				"size": "100",
+				"price": "1000"
+			},
+			{
+				"size": "200",
+				"price": "2000"
+			}
+		],
+		"creatTime": 1575131962754
+	}
+]

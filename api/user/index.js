@@ -4,6 +4,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const { successSend, failSend} = require('../../utils/utils.js')
+const { readFile } = require('../../utils/file.js')
 const userPath = `${__dirname}/user.json`;
 router.post('/register', bodyParser.json(),function(req, res){
   const param = req.body;
@@ -29,7 +30,6 @@ router.post('/register', bodyParser.json(),function(req, res){
             return;
           }
         }
-        console.log(userParam)
         userList.push(userParam);
         writeFile(res, JSON.stringify(userList))
       })
@@ -70,16 +70,5 @@ function writeFile(res, data){
   })
 }
 
-function readFile(data){
-  return new Promise( (reslove, reject) => {
-    fs.readFile(data, 'utf-8', (err, data) => {
-      if(err){
-        reject(new Error('读取文件失败'));
-        return;
-      }
-      reslove(data)
-    })
-  })
-}
 
  module.exports = router;
