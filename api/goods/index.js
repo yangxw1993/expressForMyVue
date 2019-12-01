@@ -29,7 +29,11 @@ router.post('/addGoods', bodyParser.json(),function(request, response){
 })
 
 router.get('/getGoods', bodyParser.json(), (req, res) => {
-  res.send(failSend('当前用户名不存在，请先注册')) 
+  readFile(goodsDataPath).then(data => {
+    res.send(successSend('成功', JSON.parse(data)));
+  }).catch(err => {
+    response.send(failSend('失败'))
+  })
 })
 
 function storGoods(data, response){
