@@ -23,7 +23,12 @@ function setCors(){
    
 }
 setCors();
-
+/**
+ * 静态文件
+ */
+app.use(express.static('static', {
+  extensions: ['html']
+}))
 const routes = require('./routes/index');
 routes(app)
 // 首页

@@ -12,6 +12,7 @@ router.use('/', (req, res) => {
 })
 
 module.exports = router */
+const express = require('express')
 
 module.exports = function(app){
   // 初始化
@@ -20,6 +21,18 @@ module.exports = function(app){
   const user = require('../api/user');
   // 商品
   const goods = require('../api/goods')
+  function validHeaders(req, res, next){
+    if(!req.token){
+      res.json({
+        msg: '缺少'
+      })
+    }else{
+      next();
+    }
+  }
+  // app.all('*', validHeaders) 中间件
+
+ 
   app.use('/init', init);
   app.use('/user',user);
   app.use('/goods',goods);
