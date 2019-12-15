@@ -31,9 +31,18 @@ module.exports = function(app){
     }
   }
   // app.all('*', validHeaders) 中间件
+// 404 放在所有路由后面
 
- 
+const handle_404 = (req, res, next) => {
+  res.json({
+    code: 1,
+    msg: `${decodeURIComponent(req.path)}不存在`
+  })
+}
   app.use('/init', init);
   app.use('/user',user);
   app.use('/goods',goods);
+  app.use(handle_404);
+  
+  
 };
