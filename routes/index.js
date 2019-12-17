@@ -1,17 +1,4 @@
-    /* const express = require('express');
-const router = express.Router();
 
-router.use('/', (req, res) => {
-  console.log(req.path)
-  if(req.path){
-    res.send(require('./admin'))
-  }else{
-    res.send('<h1>路由分发</h1>')
-
-  }
-})
-
-module.exports = router */
 const express = require('express')
 
 module.exports = function(app){
@@ -42,6 +29,7 @@ const handle_404 = (req, res, next) => {
   app.use('/init', init);
   app.use('/user',user);
   app.use('/goods',goods);
+  app.use('/demo', require('../api/demo'));
   app.use(handle_404);
   
   
