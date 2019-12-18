@@ -14,4 +14,4 @@
 - 2. 当前项目初始化 `pm2 init`
 - 3. 启动项目 `pm2 start ecosystem.config.js` 
 - 4. 查看日志 `pm2 log`
-- 5. 重启 `pm2 restart`
+- 5. 重启 `pm2 restart ecosystem.config.js`
