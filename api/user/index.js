@@ -3,12 +3,18 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const models = require('../../models');
 const { successSend, failSend} = require('../../utils/utils.js')
 const { readFile } = require('../../utils/file.js')
 const userPath = `${__dirname}/user.json`;
-router.post('/register', bodyParser.json(),function(req, res){
-  const param = req.body;
-  const userParam = {
+router.post('/register', bodyParser.json(), async (req, res) =>{
+  const {username, password} = req.body;
+  let user = await models.User.create({
+    name: username,
+    password
+  })
+  res.send(successSend('ok', user))
+ /*   const userParam = {
     id: Math.floor(Math.random() * 100),
     creatTime: Date.now()
   }
@@ -37,14 +43,27 @@ router.post('/register', bodyParser.json(),function(req, res){
       // 写文件
       writeFile(res, JSON.stringify([userParam]))
     }    
-  })
+  }) */
 })
 
-router.post('/login', bodyParser.json(), (req, res) => {
+router.post('/login', bodyParser.json(), async (req, res) => {
   const param = req.body;
   console.log(param,'**param')
   const {username, password} = param;
-  readFile(userPath).then(data => {
+  let userDetail = await models.User.findOne({
+    where: {name: username}
+  });
+  if(userDetail){
+    if(userDetail.password === password){
+      res.send(successSend('ok', userDetail))
+    }else{
+      res.send(failSend('用户名或密码粗错'))
+    }
+  }else{
+    res.send(failSend('当权用户名不存在，请注册'))
+  }
+
+  /* readFile(userPath).then(data => {
     const userList = JSON.parse(data);
     for(let item of userList){
       console.log(item['username'], '**', username)
@@ -58,7 +77,7 @@ router.post('/login', bodyParser.json(), (req, res) => {
       }
     }
     res.send(failSend('当前用户名不存在，请先注册'))    
-  })
+  }) */
   
 })
 function writeFile(res, data){
