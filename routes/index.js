@@ -7,7 +7,10 @@ module.exports = function(app){
   // 分发user模块，比如用户的注册和登录请求业务逻辑将会在/api/user.js中实现
   const user = require('../api/user');
   // 商品
-  const goods = require('../api/goods')
+  const goods = require('../api/goods');
+  // 上传文件
+  const upload = require('../api/upload');
+
   function validHeaders(req, res, next){
     if(!req.token){
       res.json({
@@ -29,6 +32,7 @@ const handle_404 = (req, res, next) => {
   app.use('/init', init);
   app.use('/user',user);
   app.use('/goods',goods);
+  app.use('/upload', upload);
   app.use('/demo', require('../api/demo'));
   app.use(handle_404);
   
