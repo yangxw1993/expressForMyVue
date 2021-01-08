@@ -34,6 +34,7 @@ const handle_404 = (req, res, next) => {
   app.use('/goods',goods);
   app.use('/upload', upload);
   app.use('/demo', require('../api/demo'));
+  app.use('/static', express.static('static'))
   app.use(handle_404);
   
   

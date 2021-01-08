@@ -9,12 +9,19 @@ const { queryDB, insertDB } = require('./utils/connectMongo')
 const cors = require('cors')
 const app = express();
 const bodyParser = require('body-parser');
-// need it...  
-app.use(bodyParser.urlencoded({extended: true}))
+// need it... 
+// 最大文件
+const maxFile = '2000mb'
+app.use(bodyParser.json({limit: maxFile})) 
+app.use(bodyParser.urlencoded({
+  extended: true, 
+  limit: maxFile,
+  parameterLimit:50000
+}))
 
 function setCors(){
   const host = 'http://localhost';
-  const portArr = ['5500', '8000','8001'];
+  const portArr = ['5500', '8000','8001', '8080'];
   app.use(cors({
     origin: portArr.map(item => `${host}:${item}`),
     methods:['GET','POST'],
@@ -27,30 +34,14 @@ setCors();
  * 静态文件
  */
 app.use(express.static('static', {
-  extensions: ['html']
+  extensions: ['html', 'jpg', 'gif']
 }))
+	
+
 const routes = require('./routes/index');
 routes(app)
-// 首页
-// app.use('/', require('./routes/'));
-// app.use('/user', require(`${homeRouterPath}/user/index`));
-// 接受参数
-// app.use('/test', require(`${homeRouterPath}/test/index`));
-// 返回请求值
-// app.use('/getData', require(`${homeRouterPath}/test/getData`))
+app.use('/static', express.static('static'))
 
-// 接收参数接收
-/* app.post('/sendData', bodyParser.json(), function(req, res){
-  reqData = req.body;
-  res.send({code: 0, msg: 'ok'});
-});
-app.get('/getData', (req, res) => {
-  if(reqData){
-    res.send({code: 0, data: reqData, msg: 'ok'});
-  }else{
-    res.send({code: 0, msg: '暂无数据'});
-  }
-}) */
 // 用户注册
 const dbName = 'proShopCart', sheet = 'userInfo';
 app.post('/register', bodyParser.json(), function(req, res){
